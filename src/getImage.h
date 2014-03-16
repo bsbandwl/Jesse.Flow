@@ -11,7 +11,7 @@ class getImage
 public:
     int cols,rows;
     getImage(int i):
-        cap(i)
+        cap(1)
     {
         printf("Stated\n");
         if(!cap.isOpened())  // check if we succeeded
@@ -26,7 +26,16 @@ public:
     }
     void drawMat(int i,int j,int size)
     {
-        cv::rectangle( frame,
+        cv::rectangle( frame[0],
+           cv::Point( i,j ),
+           cv::Point( i+size, j+size),
+           cv::Scalar( 0, 255, 255 ),
+           2,
+           8 );
+    }
+    void drawMat(int k,int i,int j,int size)
+    {
+        cv::rectangle( frame[k],
            cv::Point( i,j ),
            cv::Point( i+size, j+size),
            cv::Scalar( 0, 255, 255 ),
@@ -35,8 +44,6 @@ public:
     }
     void showDebug()
     {
-        cv::imshow("debug",frame);
-        cv::waitKey();
     }
     void SpeedTest()
     {
@@ -51,14 +58,33 @@ public:
             cap>>frame;
         }
     }
-    cv::Mat frame,res;
+    cv::Mat frame[3];
     uchar* getFrame()
     {
-        cap>>frame;
-        cvtColor(frame,res, CV_BGR2GRAY);
-        cv::imshow("s",res);
-        return res.data;
+        cv::Mat temp,res;
+        cap>>temp;
+        imshow("pci",temp);
+        cvtColor(temp,res, CV_BGR2GRAY);
+        uchar *resptr=new uchar[cols*rows];
+        //printf("%d %d \n",res.cols,res.rows );
+        int k=res.cols+res.rows;
+        memcpy(resptr, res.data, cols*rows*sizeof(uchar));
+        return resptr;
     }
+    uchar* getFrame(int i)
+    {
+        cv::Mat temp;
+        if(i==0)
+        {
+            temp=cv::imread("/Users/xuhao/temp/0.jpg");
+            cvtColor(temp,frame[0],CV_BGR2GRAY);
+            return frame[0].data;
+        }
+        temp=cv::imread("/Users/xuhao/temp/1.jpg");
+        cvtColor(temp,frame[1],CV_BGR2GRAY);
+        return frame[1].data;
+    }
+
     void Print()
     {}
 };

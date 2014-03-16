@@ -1,13 +1,15 @@
 #pragma once
 #include <iostream>
+#include <fstream>
 #include "getImage.h"
 class flow
 {
 public:
     int rows,cols;
     getImage source;
+    std::ofstream ofs;
     flow(int i):
-        source(i)
+        source(i),ofs("/Users/xuhao/dat.txt")
     {
         cols=source.cols;
         rows=source.rows;
