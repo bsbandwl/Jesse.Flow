@@ -24,6 +24,20 @@ public:
         this->rows=frame.rows;
         printf("cols: %d rows:%d\n",cols,rows);
     }
+    void drawMat(int i,int j,int size)
+    {
+        cv::rectangle( frame,
+           cv::Point( i,j ),
+           cv::Point( i+size, j+size),
+           cv::Scalar( 0, 255, 255 ),
+           2,
+           8 );
+    }
+    void showDebug()
+    {
+        cv::imshow("debug",frame);
+        cv::waitKey();
+    }
     void SpeedTest()
     {
         cv::Mat frame;

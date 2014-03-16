@@ -31,24 +31,17 @@ void flow::Debug()
     {
         int num=0;
         float x,y;
-        frame2=source.getFrame();
-        /*
-        if(!Compute_Flow(frame1,frame2,x,y))
-        {
-            printf("not sucess\n");
-        }
-        else
-            printf("x %f y%f\n",x,y );
-            */
-        frame1=frame2;
+        //frame2=source.getFrame();
+        frame2=frame2;
+        Compute_Flow(frame1,frame2,x,y);
     }
 }
 //motion is frame 1 to frame 2
 //失败则返回0
 int flow::Compute_Flow(uchar *frame1,uchar*frame2,float& speedx,float& speedy)
 {
-    int starty=220,endy=260;
-    int startx=300,endx=340;
+    int starty=0,endy=720;
+    int startx=0,endx=1280;
     int count=0;
     int size=8;
     int maxmotion=50;
@@ -59,12 +52,15 @@ int flow::Compute_Flow(uchar *frame1,uchar*frame2,float& speedx,float& speedy)
     speedy=0;
 
     //TODO 使用KMP改进之
+    //TODO 图形化之
     for(int j=starty;j<endy;j++)
         for(int i=startx;i<endx;i++)
         {
             if(!Compute_Diff(frame1,i,j,size,256))
                 continue;
+            source.drawMat(i,j,size);
             int dist=100000;
+            /*
             for(int jj= j-maxmotion ;jj<j+maxmotion ; jj++)
                 for(int ii=i-maxmotion ; ii < i+maxmotion ; ii++)
                     if(   (temp=Compute_SAD(frame1,frame2,i,j,ii,jj,size))<dist)
@@ -79,7 +75,9 @@ int flow::Compute_Flow(uchar *frame1,uchar*frame2,float& speedx,float& speedy)
                 speedx+=i2-i;
                 count++;
             }
+        */
         }
+    source.showDebug();
     if(count==0)
     {
         speedx=0;
@@ -108,7 +106,7 @@ int  flow::Compute_SAD (uchar *frame1,uchar *frame2,int off1X,int off1Y,int off2
 
 int main()
 {
-    flow flo0(1);
+    flow flo0(0);
     flo0.Debug();
     printf("Hello,World\n");
 }
